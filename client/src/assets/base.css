@@ -67,8 +67,8 @@
 }
 
 body {
-  min-height: 100vh;
   width: 100%;
+  height: calc(100vh - 60px);
   color: var(--color-text);
   background: var(--color-background);
   transition:

@@ -2,9 +2,51 @@
   import { ref, onMounted } from 'vue';
   import { getArtworks } from '@/apiService';
   import type { Artwork } from '@/types';
+  import Hammer from 'hammerjs'; //library for gesture handling - can't touch this 🎶
 
   const artworksData = ref<Artwork[]>([]);
   const animationDirection = ref<string>('');
+
+function swipe(artwork: Artwork) {
+    const el = document.getElementById(artwork.id);
+    const movingArtwork = new Hammer(el!);
+
+    movingArtwork.add(
+      new Hammer.Pan({ direction: Hammer.DIRECTION_ALL, threshold: 0 })
+    );
+
+    movingArtwork.on('panstart', () => {
+      artwork.isMoving = true;
+    });
+
+    movingArtwork.on('pan', ev => {
+      if (!el || !artwork.isMoving) return;
+
+      const width = el.clientWidth;
+
+      let posX = ev.deltaX;
+      el.style.left = `${posX}px`;
+      // el.style.transform = `translateX(${posX}px)`;
+      const threshold = width / 2;
+
+      console.log(posX);
+
+      if (ev.isFinal) {
+        artwork.isMoving = false;
+        if (ev.offsetDirection === 4 && posX > threshold) {
+          //direction 4 = right
+          likeArtwork(artwork);
+        } else if (ev.offsetDirection === 2 && width + posX < threshold) {
+          //direction 2 = left
+          unlikeArtwork(artwork);
+        } else {
+          // el.style.transform = 'translateX(0)';
+          el.style.top = '0';
+          el.style.left = '5px';
+        }
+      }
+    });
+  }
 
   onMounted(async () => {
     const artworks = await getArtworks();
@@ -13,8 +55,11 @@
         id: artwork.id,
         title: artwork.title,
         imgPath: artwork._links!.image.href.replace('{image_version}', 'large'),
+        isMoving: false,
       }))
       .reverse();
+
+
   });
 
   function likeArtwork(artwork: Artwork) {
@@ -31,14 +76,14 @@
 </script>
 
 <template>
-  <TransitionGroup :name="animationDirection" tag="div" >
+  <TransitionGroup :name="animationDirection" tag="div">
     <div
+      :id="artworkData.id"
       class="artwork"
       v-for="artworkData in artworksData"
-      :key="artworkData.id.toString()">
-      <img
-        :src="artworkData.imgPath.toString()"
-        :alt="artworkData.title.toString()" />
+      :key="artworkData.id"
+      @touchstart="swipe(artworkData)">
+      <img :src="artworkData.imgPath" :alt="artworkData.title" />
       <div class="title">
         {{ artworkData.title }}
       </div>
@@ -118,21 +163,18 @@
 
   .left-leave-active,
   .right-leave-active {
-    transition: all 1s ease;
+    transition: all 0.8s ease;
   }
 
   .left-leave-to {
-    opacity: 0;
-    transform: translateX(-40px);
+    transform: translateX(-120%) rotate(15deg);
   }
   .right-leave-to {
-    opacity: 0;
-    transform: translateX(40px);
+    transform: translateX(120%) rotate(-15deg);
   }
 
   .left-leave-from,
   .right-leave-from {
-    opacity: 1;
     transform: translateX(0);
   }
 </style>

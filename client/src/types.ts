@@ -1,8 +1,9 @@
 export interface Artwork {
-  id: String;
-  title: String;
-  imgPath: String;
+  id: string;
+  title: string;
+  imgPath: string;
   _links?: LinkObject;
+  isMoving?: boolean;
 }
 
 interface LinkObject {
@@ -19,6 +20,6 @@ interface LinkObject {
 }
 
 interface Link {
-  href: String;
-  templated?: Boolean;
+  href: string;
+  templated?: boolean;
 }
