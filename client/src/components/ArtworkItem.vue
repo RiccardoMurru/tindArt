@@ -6,8 +6,9 @@
 
   const artworksData = ref<Artwork[]>([]);
   const animationDirection = ref<string>('');
+  let page = 1;
 
-function swipe(artwork: Artwork) {
+  function swipe(artwork: Artwork) {
     const el = document.getElementById(artwork.id);
     const movingArtwork = new Hammer(el!);
 
@@ -29,10 +30,7 @@ function swipe(artwork: Artwork) {
       // el.style.transform = `translateX(${posX}px)`;
       const threshold = width / 2;
 
-      console.log(posX);
-
       if (ev.isFinal) {
-        artwork.isMoving = false;
         if (ev.offsetDirection === 4 && posX > threshold) {
           //direction 4 = right
           likeArtwork(artwork);
@@ -44,12 +42,14 @@ function swipe(artwork: Artwork) {
           el.style.top = '0';
           el.style.left = '5px';
         }
+        artwork.isMoving = false;
       }
     });
   }
 
-  onMounted(async () => {
-    const artworks = await getArtworks();
+  async function getNewArtworks() {
+    const artworks = await getArtworks(page);
+
     artworksData.value = artworks
       .map(artwork => ({
         id: artwork.id,
@@ -58,21 +58,32 @@ function swipe(artwork: Artwork) {
         isMoving: false,
       }))
       .reverse();
+    page++;
 
+  }
+
+  onMounted(async () => {
+    getNewArtworks();
 
   });
 
-  function likeArtwork(artwork: Artwork) {
+  function likeArtwork(artwork: Artwork, action: string) {
     const index = artworksData.value.indexOf(artwork);
     artworksData.value.splice(index, 1);
-    animationDirection.value = 'right';
+    if (action === 'like') {
+      animationDirection.value = 'right';
+    } else if (action === 'unlike') {
+      animationDirection.value = 'left';
+    }
+
+    //this is not doing what is supposed to do
+    if (artworksData.value.length === 2) {
+      getNewArtworks();
+      console.log(page);
+
+    }
   }
 
-  function unlikeArtwork(artwork: Artwork) {
-    const index = artworksData.value.indexOf(artwork);
-    artworksData.value.splice(index, 1);
-    animationDirection.value = 'left';
-  }
 </script>
 
 <template>
@@ -88,10 +99,12 @@ function swipe(artwork: Artwork) {
         {{ artworkData.title }}
       </div>
       <div class="controls">
-        <button class="icon-like" @click="likeArtwork(artworkData)"></button>
+        <button
+          class="icon-like"
+          @click="likeArtwork(artworkData, 'like')"></button>
         <button
           class="icon-unlike"
-          @click="unlikeArtwork(artworkData)"></button>
+          @click="likeArtwork(artworkData, 'unlike')"></button>
       </div>
     </div>
   </TransitionGroup>
@@ -102,6 +115,7 @@ function swipe(artwork: Artwork) {
     position: absolute;
     width: calc(100% - 10px);
     height: 100%;
+    /* transition: left .1s linear, right .1s linear; */
   }
   img {
     width: 100%;

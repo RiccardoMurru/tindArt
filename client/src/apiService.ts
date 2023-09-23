@@ -1,7 +1,8 @@
-import { apiUrl, token, size, page } from './apiConfig'
+import { apiUrl, token, size } from './apiConfig'
+
 import type { Artwork } from './types';
 
-export async function getArtworks(): Promise <Artwork[]> {
+export async function getArtworks(page: number): Promise <Artwork[]> {
   const response = await fetch(`${apiUrl}/artworks?size=${size}&page=${page}`, {
     method: 'GET',
     headers: {
