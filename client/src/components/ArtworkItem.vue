@@ -1,13 +1,14 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue';
-import { getArtworks } from '@/apiService';
-import { size } from '@/apiConfig';
+  import { getArtworks, addArtwork } from '@/apiService';
+  import { size } from '@/apiConfig';
   import type { Artwork } from '@/types';
   import Hammer from 'hammerjs'; //library for gesture handling - can't touch this 🎶
 
   const artworksData = ref<Artwork[]>([]);
   const animationDirection = ref<string>('');
   let offset = ref<number>(0);
+  let liked = ref<boolean>(false);
 
   function swipe(artwork: Artwork) {
     const el = document.getElementById(artwork.id);
@@ -51,12 +52,25 @@ import { size } from '@/apiConfig';
   async function getNewArtworks() {
     const artworks = await getArtworks(offset.value);
 
-    artworksData.value = [...artworksData.value, ...artworks.map(artwork => ({
-      id: artwork.id,
-      title: artwork.title,
-      imgPath: artwork._links!.image.href.replace('{image_version}', 'large'),
-      isMoving: false,
-    }))].reverse();
+    artworksData.value.push(
+      ...artworks
+        .map(artwork => ({
+          id: artwork.id,
+          title: artwork.title,
+          imgPath: artwork._links!.image.href.replace(
+            '{image_version}',
+            'large'
+          ),
+          medium: artwork.medium,
+          date: artwork.date,
+          dimensions: artwork.dimensions,
+          collecting_institution: artwork.collecting_institution,
+          _links: artwork._links,
+          isMoving: false,
+          liked: liked.value,
+        }))
+        .reverse()
+    );
     offset.value += size;
   }
 
@@ -68,9 +82,12 @@ import { size } from '@/apiConfig';
     const index = artworksData.value.indexOf(artwork);
     artworksData.value.splice(index, 1);
     if (action === 'like') {
+      addArtwork(artwork);
       animationDirection.value = 'right';
+      liked.value = true;
     } else if (action === 'unlike') {
       animationDirection.value = 'left';
+      liked.value = false;
     }
 
     //this is not doing what is supposed to do - kind of

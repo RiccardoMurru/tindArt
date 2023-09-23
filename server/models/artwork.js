@@ -3,10 +3,15 @@ const mongoose = require('../db');
 const { Schema } = mongoose;
 
 const artworkSchema = new Schema({
+  artwork_id: String,
   title: String,
-  author: String,
-  description: String,
-  date: Date,
+  artists: String,
+  medium: String,
+  date: String,
+  dimensions: String,
+  collecting_institution: String,
+  thumbnail: String,
+  image: String
 });
 
 const Artwork = mongoose.model('Artwork', artworkSchema);

@@ -2,10 +2,27 @@ export interface Artwork {
   id: string;
   title: string;
   imgPath: string;
+  medium: string;
+  date: string;
+  dimensions: DimensionObject;
+  collecting_institution: string;
   _links?: LinkObject;
   isMoving?: boolean;
+  liked: boolean;
 }
 
+interface DimensionObject {
+  in: Dimensions;
+  cm: Dimensions;
+}
+
+interface Dimensions {
+  text?: string;
+  height?: any;
+  width?: any;
+  depth?: any;
+  diameter?: any
+}
 interface LinkObject {
   thumbnail: Link;
   image: Link;
