@@ -1,12 +1,13 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue';
-  import { getArtworks } from '@/apiService';
+import { getArtworks } from '@/apiService';
+import { size } from '@/apiConfig';
   import type { Artwork } from '@/types';
   import Hammer from 'hammerjs'; //library for gesture handling - can't touch this 🎶
 
   const artworksData = ref<Artwork[]>([]);
   const animationDirection = ref<string>('');
-  let page = 1;
+  let offset = ref<number>(0);
 
   function swipe(artwork: Artwork) {
     const el = document.getElementById(artwork.id);
@@ -33,10 +34,10 @@
       if (ev.isFinal) {
         if (ev.offsetDirection === 4 && posX > threshold) {
           //direction 4 = right
-          likeArtwork(artwork);
+          likeArtwork(artwork, 'like');
         } else if (ev.offsetDirection === 2 && width + posX < threshold) {
           //direction 2 = left
-          unlikeArtwork(artwork);
+          likeArtwork(artwork, 'unlike');
         } else {
           // el.style.transform = 'translateX(0)';
           el.style.top = '0';
@@ -48,23 +49,19 @@
   }
 
   async function getNewArtworks() {
-    const artworks = await getArtworks(page);
+    const artworks = await getArtworks(offset.value);
 
-    artworksData.value = artworks
-      .map(artwork => ({
-        id: artwork.id,
-        title: artwork.title,
-        imgPath: artwork._links!.image.href.replace('{image_version}', 'large'),
-        isMoving: false,
-      }))
-      .reverse();
-    page++;
-
+    artworksData.value = [...artworksData.value, ...artworks.map(artwork => ({
+      id: artwork.id,
+      title: artwork.title,
+      imgPath: artwork._links!.image.href.replace('{image_version}', 'large'),
+      isMoving: false,
+    }))].reverse();
+    offset.value += size;
   }
 
   onMounted(async () => {
     getNewArtworks();
-
   });
 
   function likeArtwork(artwork: Artwork, action: string) {
@@ -76,14 +73,11 @@
       animationDirection.value = 'left';
     }
 
-    //this is not doing what is supposed to do
-    if (artworksData.value.length === 2) {
+    //this is not doing what is supposed to do - kind of
+    if (artworksData.value.length === 0) {
       getNewArtworks();
-      console.log(page);
-
     }
   }
-
 </script>
 
 <template>
