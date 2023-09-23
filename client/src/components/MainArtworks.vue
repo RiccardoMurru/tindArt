@@ -9,7 +9,7 @@ import ArtworkItem from './ArtworkItem.vue';
   </main>
 </template>
 
-<style lang="postcss" scoped>
+<style lang="postcss">
   main {
     position: relative;
     width: 100%;

@@ -11,6 +11,10 @@ export interface Artwork {
   liked: boolean;
 }
 
+export interface FavoriteArtwork extends Artwork {
+  thumbnail: string;
+  image: string;
+}
 interface DimensionObject {
   in: Dimensions;
   cm: Dimensions;

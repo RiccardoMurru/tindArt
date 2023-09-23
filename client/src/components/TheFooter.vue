@@ -2,9 +2,9 @@
 
 <template>
   <footer>
-    <span class="icon-settings"></span>
-    <span class="icon-home"></span>
-    <span class="icon-gallery"></span>
+    <router-link to="/settings" class="icon-settings"></router-link>
+    <router-link to="/" class="icon-home"></router-link>
+    <router-link to="/my-artworks" class="icon-gallery"></router-link>
   </footer>
 </template>
 
@@ -21,20 +21,31 @@
       font-size: 40px;
     }
   }
+  [class^='icon'] {
+    &::before {
+
+    }
+  }
   .icon-settings {
     &::before {
       content: '\e429';
+      font-family: 'Material Symbols Rounded';
+      font-size: 30px;
     }
   }
   .icon-home {
     &::before {
       content: '\e88a';
+      font-family: 'Material Symbols Rounded';
+      font-size: 30px;
     }
   }
 
   .icon-gallery {
     &::before {
-      content: '\e060';
+      content: '\e413';
+      font-family: 'Material Symbols Rounded';
+      font-size: 30px;
     }
   }
 </style>

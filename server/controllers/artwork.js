@@ -28,6 +28,17 @@ async function addArtwork (req, res) {
   }
 }
 
+async function getFavoriteArtworks (req, res) {
+  try {
+    const artworks = await Artwork.find({});
+    return res.status(200).json(artworks);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+}
+
 module.exports = {
-  addArtwork
+  addArtwork,
+  getFavoriteArtworks
 }

@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import TheHeader from '../components/TheHeader.vue';
-  import MainArtworks from '../components/MainArtworks.vue';
+  import MainLists from '../components/MainLists.vue';
   import TheFooter from '../components/TheFooter.vue';
 </script>
 
 <template>
   <TheHeader />
-  <MainArtworks />
+  <MainLists />
   <TheFooter />
 </template>
