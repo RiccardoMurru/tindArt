@@ -9,6 +9,7 @@ export interface Artwork {
   collecting_institution: string;
   _links?: LinkObject;
   isFavorite: boolean;
+  isNotLiked: boolean;
 }
 
 

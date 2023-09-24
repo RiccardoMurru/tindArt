@@ -72,3 +72,13 @@ export async function getFavoriteArtworks() {
   const data = await response.json();
   return data;
 }
+
+export async function unlikeArtwork(artwork: Artwork) {
+  await fetch(`${serverUrl}/unlike`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(artwork),
+  });
+}

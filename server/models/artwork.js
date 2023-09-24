@@ -3,7 +3,7 @@ const mongoose = require('../db');
 const { Schema } = mongoose;
 
 const artworkSchema = new Schema({
-  artwork_id: String,
+  id: String,
   title: String,
   artists: String,
   medium: String,
@@ -13,6 +13,7 @@ const artworkSchema = new Schema({
   thumbnail: String,
   image: String,
   isFavorite: Boolean,
+  isNotLiked: Boolean,
 });
 
 const Artwork = mongoose.model('Artwork', artworkSchema);

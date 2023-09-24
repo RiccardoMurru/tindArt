@@ -5,14 +5,14 @@ const Artwork = require('../models/artwork');
 async function addArtwork (req, res) {
   try {
     const artwork = req.body;
-    const existingArtwork = await Artwork.findOne({ artwork_id: artwork.id });
+    const existingArtwork = await Artwork.findOne({ id: artwork.id });
     if (existingArtwork) {
       return res
         .status(400)
         .json({ error: 'Artwork already exists' });
     };
     const newArtwork = await Artwork.create({
-      artwork_id: artwork.id,
+      id: artwork.id,
       title: artwork.title,
       artists: artwork.artists,
       medium: artwork.medium,
@@ -22,6 +22,7 @@ async function addArtwork (req, res) {
       thumbnail: artwork._links.thumbnail.href,
       image: artwork.image,
       isFavorite: artwork.isFavorite,
+      isNotLiked: artwork.isNotLiked,
     });
 
     res.status(201).json(newArtwork);
@@ -33,7 +34,11 @@ async function addArtwork (req, res) {
 
 async function getArtworks(req, res) {
   try {
-    const artworks = await Artwork.find({});
+    // get all artworks that are not favorite nor not liked
+    const artworks = await Artwork.find({
+      isFavorite: false,
+      isNotLiked: false
+    });
     return res.status(200).json(artworks);
   } catch (error) {
     console.log(error);
@@ -61,8 +66,39 @@ async function addFavoriteArtwork (req, res) {
 
 async function getFavoriteArtworks (req, res) {
   try {
-    const artworks = await Artwork.find({});
+    const artworks = await Artwork.find({
+      isFavorite: true,
+    });
     return res.status(200).json(artworks);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+}
+
+async function deleteArtwork (req, res) {
+  try {
+    const artwork = req.body;
+    const deletedArtwork = await Artwork.deleteOne({
+      artwork_id: artwork.id,
+    })
+    res.status(200).json(deleteArtwork);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+}
+
+async function unlikeArtwork (req, res) {
+  try {
+    const artwork = req.body;
+    await Artwork.updateOne(
+      { artwork_id: artwork.id },
+      {
+        isFavorite: artwork.isNotLiked,
+      }
+    );
+    res.status(201);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'Server error' });
@@ -73,5 +109,7 @@ module.exports = {
   getArtworks,
   addArtwork,
   getFavoriteArtworks,
-  addFavoriteArtwork
+  addFavoriteArtwork,
+  deleteArtwork,
+  unlikeArtwork,
 }

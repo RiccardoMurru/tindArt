@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, defineEmits } from 'vue';
+  import { ref, defineEmits, nextTick } from 'vue';
   import type { Artwork } from '@/types';
   import Hammer from 'hammerjs'; //library for gesture handling - can't touch this 🎶
 
@@ -11,7 +11,8 @@
 
   const emits = defineEmits(['like-artwork']);
 
-  function swipe(artwork: Artwork) {
+  async function swipe(artwork: Artwork) {
+    await nextTick();
     const el = document.getElementById(artwork.id);
     const movingArtwork = new Hammer(el!);
 
@@ -56,23 +57,18 @@
 </script>
 
 <template>
-    <div
-      :id="artwork.id"
-      class="artwork"
-      @touchstart="swipe(artwork)">
-      <img :src="artwork.image" :alt="artwork.title" />
-      <div class="title">
-        {{ artwork.title }}
-      </div>
-      <div class="controls">
-        <button
-          class="icon-like"
-          @click="likeArtwork(artwork, 'like')"></button>
-        <button
-          class="icon-unlike"
-          @click="likeArtwork(artwork, 'unlike')"></button>
-      </div>
+  <div :id="artwork.id" class="artwork" @touchstart="swipe(artwork)">
+    <img :src="artwork.image" :alt="artwork.title" />
+    <div class="title">
+      {{ artwork.title }}
     </div>
+    <div class="controls">
+      <button class="icon-like" @click="likeArtwork(artwork, 'like')"></button>
+      <button
+        class="icon-unlike"
+        @click="likeArtwork(artwork, 'unlike')"></button>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="postcss">
