@@ -1,14 +1,15 @@
 <script setup lang="ts">
-  import { ref, onMounted } from 'vue';
-  import { getArtworks, addArtwork } from '@/apiService';
-  import { size } from '@/apiConfig';
+  import { ref, defineEmits } from 'vue';
   import type { Artwork } from '@/types';
   import Hammer from 'hammerjs'; //library for gesture handling - can't touch this 🎶
 
-  const artworksData = ref<Artwork[]>([]);
-  const animationDirection = ref<string>('');
-  let offset = ref<number>(0);
-  let liked = ref<boolean>(false);
+  let isMoving = ref<boolean>(false);
+
+  const props = defineProps<{
+    artwork: Artwork;
+  }>();
+
+  const emits = defineEmits(['like-artwork']);
 
   function swipe(artwork: Artwork) {
     const el = document.getElementById(artwork.id);
@@ -19,11 +20,11 @@
     );
 
     movingArtwork.on('panstart', () => {
-      artwork.isMoving = true;
+      isMoving.value = true;
     });
 
     movingArtwork.on('pan', ev => {
-      if (!el || !artwork.isMoving) return;
+      if (!el || !isMoving.value) return;
 
       const width = el.clientWidth;
 
@@ -33,6 +34,7 @@
       const threshold = width / 2;
 
       if (ev.isFinal) {
+        isMoving.value = false;
         if (ev.offsetDirection === 4 && posX > threshold) {
           //direction 4 = right
           likeArtwork(artwork, 'like');
@@ -44,81 +46,33 @@
           el.style.top = '0';
           el.style.left = '5px';
         }
-        artwork.isMoving = false;
       }
     });
   }
 
-  async function getNewArtworks() {
-    const artworks = await getArtworks(offset.value);
-
-    artworksData.value.push(
-      ...artworks
-        .map(artwork => ({
-          id: artwork.id,
-          title: artwork.title,
-          imgPath: artwork._links!.image.href.replace(
-            '{image_version}',
-            'large'
-          ),
-          medium: artwork.medium,
-          date: artwork.date,
-          dimensions: artwork.dimensions,
-          collecting_institution: artwork.collecting_institution,
-          _links: artwork._links,
-          isMoving: false,
-          liked: liked.value,
-        }))
-        .reverse()
-    );
-    offset.value += size;
-  }
-
-  onMounted(async () => {
-    getNewArtworks();
-  });
-
-  function likeArtwork(artwork: Artwork, action: string) {
-    const index = artworksData.value.indexOf(artwork);
-    artworksData.value.splice(index, 1);
-    if (action === 'like') {
-      addArtwork(artwork);
-      animationDirection.value = 'right';
-      liked.value = true;
-    } else if (action === 'unlike') {
-      animationDirection.value = 'left';
-      liked.value = false;
-    }
-
-    //this is not doing what is supposed to do - kind of
-    if (artworksData.value.length === 0) {
-      getNewArtworks();
-    }
+  async function likeArtwork(artwork: Artwork, action: string) {
+    emits('like-artwork', { artwork, action });
   }
 </script>
 
 <template>
-  <TransitionGroup :name="animationDirection" tag="div">
     <div
-      :id="artworkData.id"
+      :id="artwork.id"
       class="artwork"
-      v-for="artworkData in artworksData"
-      :key="artworkData.id"
-      @touchstart="swipe(artworkData)">
-      <img :src="artworkData.imgPath" :alt="artworkData.title" />
+      @touchstart="swipe(artwork)">
+      <img :src="artwork.image" :alt="artwork.title" />
       <div class="title">
-        {{ artworkData.title }}
+        {{ artwork.title }}
       </div>
       <div class="controls">
         <button
           class="icon-like"
-          @click="likeArtwork(artworkData, 'like')"></button>
+          @click="likeArtwork(artwork, 'like')"></button>
         <button
           class="icon-unlike"
-          @click="likeArtwork(artworkData, 'unlike')"></button>
+          @click="likeArtwork(artwork, 'unlike')"></button>
       </div>
     </div>
-  </TransitionGroup>
 </template>
 
 <style scoped lang="postcss">
@@ -184,22 +138,5 @@
         color: #ef233c;
       }
     }
-  }
-
-  .left-leave-active,
-  .right-leave-active {
-    transition: all 0.8s ease;
-  }
-
-  .left-leave-to {
-    transform: translateX(-120%) rotate(15deg);
-  }
-  .right-leave-to {
-    transform: translateX(120%) rotate(-15deg);
-  }
-
-  .left-leave-from,
-  .right-leave-from {
-    transform: translateX(0);
   }
 </style>

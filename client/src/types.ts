@@ -1,15 +1,16 @@
 export interface Artwork {
   id: string;
+  artists: string;
   title: string;
-  imgPath: string;
+  image: string;
   medium: string;
   date: string;
   dimensions: DimensionObject;
   collecting_institution: string;
   _links?: LinkObject;
-  isMoving?: boolean;
-  liked: boolean;
+  isFavorite: boolean;
 }
+
 
 export interface FavoriteArtwork extends Artwork {
   thumbnail: string;

@@ -1,5 +1,7 @@
 const Artwork = require('../models/artwork');
 
+
+// at the beginning the artworks are added to the db
 async function addArtwork (req, res) {
   try {
     const artwork = req.body;
@@ -12,16 +14,45 @@ async function addArtwork (req, res) {
     const newArtwork = await Artwork.create({
       artwork_id: artwork.id,
       title: artwork.title,
-      artists: artwork._links.artists.href,
+      artists: artwork.artists,
       medium: artwork.medium,
       date: artwork.date,
       dimensions: artwork.dimensions.cm.text,
       collecting_institution: artwork.collecting_institution,
       thumbnail: artwork._links.thumbnail.href,
-      image: artwork.imgPath,
+      image: artwork.image,
+      isFavorite: artwork.isFavorite,
     });
 
     res.status(201).json(newArtwork);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+}
+
+async function getArtworks(req, res) {
+  try {
+    const artworks = await Artwork.find({});
+    return res.status(200).json(artworks);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+}
+
+async function addFavoriteArtwork (req, res) {
+  try {
+    const artwork = req.body;
+    await Artwork.updateOne(
+      { artwork_id: artwork.id },
+      {
+        artists: artwork.artists,
+        isFavorite: artwork.isFavorite
+      }
+    );
+
+    res.status(201)
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'Server error' });
@@ -39,6 +70,8 @@ async function getFavoriteArtworks (req, res) {
 }
 
 module.exports = {
+  getArtworks,
   addArtwork,
-  getFavoriteArtworks
+  getFavoriteArtworks,
+  addFavoriteArtwork
 }

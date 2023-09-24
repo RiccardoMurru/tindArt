@@ -11,7 +11,8 @@ const artworkSchema = new Schema({
   dimensions: String,
   collecting_institution: String,
   thumbnail: String,
-  image: String
+  image: String,
+  isFavorite: Boolean,
 });
 
 const Artwork = mongoose.model('Artwork', artworkSchema);

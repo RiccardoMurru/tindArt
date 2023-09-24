@@ -1,3 +1,3 @@
 export const apiUrl = 'https://api.artsy.net/api';
 export const token = `eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6IiIsInN1YmplY3RfYXBwbGljYXRpb24iOiJhYjkzZDEwNi03OGQ0LTQyNWQtOWYxNy04N2ZhMDNiZDIwMGYiLCJleHAiOjE2OTU5MDU2OTksImlhdCI6MTY5NTMwMDg5OSwiYXVkIjoiYWI5M2QxMDYtNzhkNC00MjVkLTlmMTctODdmYTAzYmQyMDBmIiwiaXNzIjoiR3Jhdml0eSIsImp0aSI6IjY1MGMzZDIzNzRhNmE4MDAwZGIwZDlkMCJ9.DEzf2eCHjs8lP-An1GtmpzSbh5Ojwfz9snHr2P6P3a8`;
-export const size = 30;
+export const size = 1; //number of artworks to fetch
