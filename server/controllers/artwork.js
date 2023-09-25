@@ -21,6 +21,7 @@ async function addArtwork (req, res) {
       image: artwork.image,
       isFavorite: artwork.isFavorite,
       isNotLiked: artwork.isNotLiked,
+      _links: artwork._links,
     });
 
     res.status(201).json(newArtwork);

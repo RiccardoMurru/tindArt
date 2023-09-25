@@ -14,6 +14,7 @@ const artworkSchema = new Schema({
   image: String,
   isFavorite: Boolean,
   isNotLiked: Boolean,
+  _links: Object,
 });
 
 const Artwork = mongoose.model('Artwork', artworkSchema);
