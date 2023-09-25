@@ -5,7 +5,7 @@
 </script>
 
 <template>
-  <TheHeader />
+  <TheHeader heading="Art Gallery"/>
   <MainLists />
   <TheFooter />
 </template>

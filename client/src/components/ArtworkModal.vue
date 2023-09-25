@@ -22,9 +22,9 @@
         <h2>{{ artwork.artists }}</h2>
       </div>
       <div class="artwork-details">
+        <p class="date">{{ artwork.date }}</p>
         <h2>{{ artwork.collecting_institution }}</h2>
-        <p>{{ artwork.medium }}, {{ artwork.date }}</p>
-        <p>{{ artwork.dimensions }}</p>
+        <p>{{ artwork.medium }}, {{ artwork.dimensions }}</p>
       </div>
     </div>
   </div>
@@ -39,10 +39,10 @@
     height: 100vh;
     padding: 50px 10px 10px 10px;
     border-radius: 20px 20px 0 0 ;
-    border: 1px solid rgba(255,255,255, 0.1);
-    background: #1d1d1d;
+    background: var(--secondaryBackground);
     z-index: 10;
     overflow-y: auto;
+    line-height: 1.2;
   }
 
   .details {
@@ -50,6 +50,23 @@
     overflow-y: auto;
   }
 
+  h1 {
+    font-size: 23px;
+    margin: 10px 0 20px 0;
+  }
+  h2 {
+    font-size: 21px;
+    margin-bottom: 20px;
+  }
+  .artwork-details {
+    .date {
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-size: 19px;
+      margin-bottom: 10px;
+    }
+  }
   .icon-close {
     position: absolute;
     top: 10px;

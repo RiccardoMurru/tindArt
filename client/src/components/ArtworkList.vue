@@ -24,7 +24,6 @@
 </script>
 
 <template>
-  <h1>Art Gallery</h1>
   <ul>
     <li v-for="favoriteArtwork in favoriteArtworks" :key="favoriteArtwork.id">
       <ArtworkListItem
@@ -41,16 +40,15 @@
 </template>
 
 <style lang="postcss" scoped>
-  h1 {
-    margin: 10px 0 20px 0;
-    font-size: 27px;
-  }
   ul {
+    padding: 20px 0;
     overflow-y: auto;
-    height: calc(100% - 110px);
+    height: 100%;
   }
   li {
+    padding-bottom: 10px;
     &:not(:last-child) {
+      border-bottom: 1px solid rgba(255,255,255,.05);
       margin-bottom: 15px;
     }
   }

@@ -5,7 +5,7 @@
 </script>
 
 <template>
-  <TheHeader />
+  <TheHeader heading="tindArt"/>
   <MainArtworks />
   <TheFooter />
 </template>

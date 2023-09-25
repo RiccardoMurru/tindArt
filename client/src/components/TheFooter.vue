@@ -12,6 +12,7 @@
   footer {
     display: flex;
     justify-content: space-around;
+    align-items: center;
     width: 100%;
     height: 65px;
     margin-top: auto;

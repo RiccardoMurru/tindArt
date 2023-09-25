@@ -61,14 +61,11 @@
       animationDirection.value = 'right';
       try {
         artwork.artists = await getArtist(artwork);
-        console.log(artwork);
       } catch (error) {
         console.log(error);
       }
       artwork.isFavorite = true;
-      console.log(artwork);
       addFavoriteArtwork(artwork);
-
     } else if (action === 'unlike') {
       animationDirection.value = 'left';
       artwork.isNotLiked = true;
