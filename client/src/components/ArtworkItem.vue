@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, defineEmits, nextTick } from 'vue';
+  import { ref, nextTick } from 'vue';
   import type { Artwork } from '@/types';
   import Hammer from 'hammerjs'; //library for gesture handling - can't touch this 🎶
 

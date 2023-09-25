@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { onMounted, ref, watch } from 'vue';
+  import { onMounted, reactive, ref, watch } from 'vue';
   import ArtworkItem from './ArtworkItem.vue';
   import {
     getArtworks,
@@ -12,16 +12,13 @@
   import { size } from '@/apiConfig';
   import type { Artwork } from '@/types';
 
-  const artworksData = ref<Artwork[]>([]);
+  const artworksData = reactive<Artwork[]>([]);
   let offset = ref<number>(0);
-let animationDirection = ref<string>('');
-  let countTest = ref(0)
+  let animationDirection = ref<string>('');
 
   async function getNewArtworks() {
     //get artworks from api
     const artworks = await getArtworks(offset.value);
-
-    console.log('fetch', artworks);
 
     //format artworks
     const formattedArtworks = artworks.map(artwork => ({
@@ -38,24 +35,28 @@ let animationDirection = ref<string>('');
       artists: '',
     }));
 
-    console.log(formattedArtworks);
-
     //add artworks to db
-    formattedArtworks.forEach(artwork => {
-      addArtwork(artwork);
-    });
+    for (let i = 0; i < formattedArtworks.length; i++) {
+      await addArtwork(formattedArtworks[i]);
+    }
+    // formattedArtworks.forEach(artwork => {
+    //   addArtwork(artwork);
+    // });
 
     const artworksFromDb = await getArtworksFromDb();
 
     //set state as artworks from db
-    artworksData.value.push(...artworksFromDb.reverse());
+
+    artworksData.push(...artworksFromDb.reverse());
+
 
     offset.value += size;
+
   }
 
   async function handleLikeArtwork(artwork: Artwork, action: string) {
-    const index = artworksData.value.indexOf(artwork);
-    artworksData.value.splice(index, 1);
+    const index = artworksData.indexOf(artwork);
+    artworksData.splice(index, 1);
     if (action === 'like') {
       animationDirection.value = 'right';
       try {
@@ -69,23 +70,20 @@ let animationDirection = ref<string>('');
       animationDirection.value = 'left';
       artwork.isNotLiked = true;
       unlikeArtwork(artwork);
-      countTest.value++;
-
     }
   }
 
   watch(
-    () => artworksData.value,
-     (newArtworksData) => {
-      console.log(newArtworksData);
-      // if (newArtworksData.value.length === 0) {
-      //   console.log('get new artworks');
-
-      //   // await getNewArtworks();
-      // }
+    () => artworksData,
+    newArtworksData => {
+      if (newArtworksData.length === 0) {
+        getNewArtworks();
+      }
+    },
+    {
+      deep: true,
     }
   );
-
   onMounted(async () => {
     getNewArtworks();
   });

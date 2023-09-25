@@ -1,6 +1,5 @@
 const Artwork = require('../models/artwork');
 
-
 // at the beginning the artworks are added to the db
 async function addArtwork (req, res) {
   try {
@@ -8,8 +7,7 @@ async function addArtwork (req, res) {
     const existingArtwork = await Artwork.findOne({ id: artwork.id });
     if (existingArtwork) {
       return res
-        .status(400)
-        .json({ error: 'Artwork already exists' });
+        .status(200).json({message: 'Artwork already exists'});
     };
     const newArtwork = await Artwork.create({
       id: artwork.id,
@@ -50,7 +48,7 @@ async function addFavoriteArtwork (req, res) {
   try {
     const artwork = req.body;
     await Artwork.updateOne(
-      { artwork_id: artwork.id },
+      { id: artwork.id },
       {
         artists: artwork.artists,
         isFavorite: artwork.isFavorite
@@ -80,7 +78,7 @@ async function deleteArtwork (req, res) {
   try {
     const artwork = req.body;
     const deletedArtwork = await Artwork.deleteOne({
-      artwork_id: artwork.id,
+      id: artwork.id,
     })
     res.status(200).json(deleteArtwork);
   } catch (error) {
@@ -93,9 +91,9 @@ async function unlikeArtwork (req, res) {
   try {
     const artwork = req.body;
     await Artwork.updateOne(
-      { artwork_id: artwork.id },
+      { id: artwork.id },
       {
-        isFavorite: artwork.isNotLiked,
+        isNotLiked: artwork.isNotLiked,
       }
     );
     res.status(201);
