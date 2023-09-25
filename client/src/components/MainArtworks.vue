@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue';
+  import { onMounted, ref, watch } from 'vue';
   import ArtworkItem from './ArtworkItem.vue';
   import {
     getArtworks,
@@ -14,7 +14,8 @@
 
   const artworksData = ref<Artwork[]>([]);
   let offset = ref<number>(0);
-  let animationDirection = ref<string>('');
+let animationDirection = ref<string>('');
+  let countTest = ref(0)
 
   async function getNewArtworks() {
     //get artworks from api
@@ -68,12 +69,22 @@
       animationDirection.value = 'left';
       artwork.isNotLiked = true;
       unlikeArtwork(artwork);
-    }
-    //this is not doing what is supposed to do - kind of
-    if (artworksData.value.length === 0) {
-      getNewArtworks();
+      countTest.value++;
+
     }
   }
+
+  watch(
+    () => artworksData.value,
+     (newArtworksData) => {
+      console.log(newArtworksData);
+      // if (newArtworksData.value.length === 0) {
+      //   console.log('get new artworks');
+
+      //   // await getNewArtworks();
+      // }
+    }
+  );
 
   onMounted(async () => {
     getNewArtworks();
