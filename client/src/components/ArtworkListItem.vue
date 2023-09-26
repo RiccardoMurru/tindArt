@@ -110,7 +110,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: var(--color-text);
+    color: var(--modalText);
     line-height: 1.2;
     font-weight: 600;
     font-size: 16px;
