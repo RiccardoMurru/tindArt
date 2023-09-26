@@ -22,11 +22,6 @@
       font-size: 40px;
     }
   }
-  [class^='icon'] {
-    &::before {
-
-    }
-  }
   .icon-settings {
     &::before {
       content: '\e429';
@@ -47,6 +42,12 @@
       content: '\e413';
       font-family: 'Material Symbols Rounded';
       font-size: 30px;
+    }
+  }
+  .router-link-active,
+  .router-link-exact-active {
+    &::before {
+      color: var(--accentColor);
     }
   }
 </style>

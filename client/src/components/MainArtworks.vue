@@ -106,7 +106,7 @@
     position: relative;
     width: 100%;
     height: calc(100% - 130px);
-    padding: 0 5px;
+    padding: 5px;
   }
   .left-leave-active,
   .right-leave-active {

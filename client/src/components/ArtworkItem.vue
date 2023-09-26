@@ -44,7 +44,7 @@
           likeArtwork(artwork, 'unlike');
         } else {
           // el.style.transform = 'translateX(0)';
-          el.style.top = '0';
+          el.style.top = '5px';
           el.style.left = '5px';
         }
       }

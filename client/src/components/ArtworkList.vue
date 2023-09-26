@@ -2,20 +2,35 @@
   import { ref, onMounted } from 'vue';
   import ArtworkListItem from './ArtworkListItem.vue';
   import ArtworkModal from './ArtworkModal.vue';
-  import { getFavoriteArtworks } from '@/apiService';
+  import { getFavoriteArtworks, unlikeArtwork } from '@/apiService';
   import type { FavoriteArtwork } from '@/types';
 
   const favoriteArtworks = ref<FavoriteArtwork[]>([]);
   let artworkModal = ref<FavoriteArtwork>();
   let showModal = ref<boolean>(false);
 
-  function handleShowArtwork(artwork: FavoriteArtwork) {
+  function showArtwork(artwork: FavoriteArtwork) {
     artworkModal.value = artwork;
-    handleToggleModal()
+
+    handleToggleModal();
   }
 
-  function handleToggleModal() {
+function handleToggleModal() {
     showModal.value = !showModal.value;
+  }
+
+async function handleRemoveArtwork(artwork: FavoriteArtwork) {
+    const index = favoriteArtworks.value.indexOf(artwork);
+    favoriteArtworks.value.splice(index, 1);
+    try {
+      artwork.isFavorite = false;
+      artwork.isNotLiked = true;
+      await unlikeArtwork(artwork);
+      console.log(`removed ${artwork.title}`);
+
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   onMounted(async () => {
@@ -25,11 +40,13 @@
 
 <template>
   <ul>
-    <li v-for="favoriteArtwork in favoriteArtworks" :key="favoriteArtwork.id">
-      <ArtworkListItem
-        :artwork="favoriteArtwork"
-        @show-artwork="handleShowArtwork(favoriteArtwork)" />
-    </li>
+    <TransitionGroup name="list-item">
+      <li v-for="favoriteArtwork in favoriteArtworks" :key="favoriteArtwork.id" @click.stop="showArtwork(favoriteArtwork)">
+        <ArtworkListItem
+          :artwork="favoriteArtwork"
+          @remove-artwork="handleRemoveArtwork(favoriteArtwork)"/>
+      </li>
+    </TransitionGroup>
   </ul>
   <Transition name="modal">
     <ArtworkModal
@@ -46,11 +63,33 @@
     height: 100%;
   }
   li {
-    padding-bottom: 10px;
+    position: relative;
+    padding-bottom: 15px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 10px;
+    padding: 10px;
+    overflow: hidden;
     &:not(:last-child) {
-      border-bottom: 1px solid rgba(255,255,255,.05);
-      margin-bottom: 15px;
+      margin-bottom: 5px;
     }
+  }
+  .list-item-enter-active,
+  .list-item-leave-active {
+    transition: transform .25s ease-out;
+  }
+  .list-item-enter-from {
+    transform: translateX(-100%);
+  }
+  .list-item-enter-to {
+    transform: translateX(0);
+
+  }
+  .list-item-leave-from {
+    transform: translateX(0);
+  }
+  .list-item-leave-to {
+    transform: translateX(-100%);
+
   }
   .modal-enter-active,
   .modal-leave-active {

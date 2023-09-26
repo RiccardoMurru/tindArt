@@ -94,6 +94,7 @@ async function unlikeArtwork (req, res) {
     await Artwork.updateOne(
       { id: artwork.id },
       {
+        isFavorite: artwork.isFavorite,
         isNotLiked: artwork.isNotLiked,
       }
     );

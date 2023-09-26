@@ -53,6 +53,7 @@
   h1 {
     font-size: 23px;
     margin: 10px 0 20px 0;
+    color: var(--accentColor);
   }
   h2 {
     font-size: 21px;
