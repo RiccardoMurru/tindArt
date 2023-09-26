@@ -65,12 +65,15 @@ async function handleRemoveArtwork(artwork: FavoriteArtwork) {
   li {
     position: relative;
     padding-bottom: 15px;
-    background: rgba(255, 255, 255, 0.02);
     border-radius: 10px;
     padding: 10px;
     overflow: hidden;
+    background: var(--backgroundListItem);
     &:not(:last-child) {
       margin-bottom: 5px;
+    }
+    .dark & {
+
     }
   }
   .list-item-enter-active,

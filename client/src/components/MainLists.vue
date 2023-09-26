@@ -11,5 +11,7 @@ import ArtworkList from './ArtworkList.vue';
 <style lang="postcss" scoped>
   main {
     padding: 0 10px;
+    background: var(--colorBackground);
+    color: var(--color-text);
   }
 </style>

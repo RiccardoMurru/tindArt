@@ -107,6 +107,8 @@
     width: 100%;
     height: calc(100% - 130px);
     padding: 5px;
+    background: var(--colorBackground);
+    color: var(--color-text);
   }
   .left-leave-active,
   .right-leave-active {

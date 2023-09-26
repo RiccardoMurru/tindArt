@@ -43,6 +43,7 @@
     z-index: 10;
     overflow-y: auto;
     line-height: 1.2;
+    color: var(--modalText);
   }
 
   .details {
@@ -84,5 +85,6 @@
   img {
     max-width: 100%;
     margin: 0;
+    border-radius: 5px;
   }
 </style>

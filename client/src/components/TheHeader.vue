@@ -23,6 +23,8 @@ const props = defineProps<{
     width: 100%;
     height: 65px;
     padding: 10px 20px;
+    background: var(--colorBackground);
+    color: var(--color-text);
   }
   h1 {
     font-size: 21px;

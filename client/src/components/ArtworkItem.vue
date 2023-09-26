@@ -89,8 +89,8 @@
     bottom: 20px;
     left: 20px;
     max-width: calc(100% - 40px);
-    background: rgba(0, 0, 0, 0.7);
-    color: #fff;
+    background: var(--accentColor);
+    color: var(--colorBackground);
     font-size: 17px;
     font-weight: 600;
     padding: 10px 15px;
@@ -98,6 +98,9 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    .light & {
+      color: var(--color-text);
+    }
   }
   .controls {
     position: absolute;

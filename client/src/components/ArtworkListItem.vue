@@ -85,7 +85,7 @@
     &::before {
       content: '\e5cd';
       font-size: 25px;
-      color: #fff;
+      color: var(--color-text);
     }
   }
 
