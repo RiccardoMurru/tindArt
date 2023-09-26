@@ -15,11 +15,11 @@
     handleToggleModal();
   }
 
-function handleToggleModal() {
+  function handleToggleModal() {
     showModal.value = !showModal.value;
   }
 
-async function handleRemoveArtwork(artwork: FavoriteArtwork) {
+  async function handleRemoveArtwork(artwork: FavoriteArtwork) {
     const index = favoriteArtworks.value.indexOf(artwork);
     favoriteArtworks.value.splice(index, 1);
     try {
@@ -27,7 +27,6 @@ async function handleRemoveArtwork(artwork: FavoriteArtwork) {
       artwork.isNotLiked = true;
       await unlikeArtwork(artwork);
       console.log(`removed ${artwork.title}`);
-
     } catch (error) {
       console.log(error);
     }
@@ -40,11 +39,14 @@ async function handleRemoveArtwork(artwork: FavoriteArtwork) {
 
 <template>
   <ul>
-    <TransitionGroup name="list-item">
-      <li v-for="favoriteArtwork in favoriteArtworks" :key="favoriteArtwork.id" @click.stop="showArtwork(favoriteArtwork)">
+    <TransitionGroup name="list">
+      <li
+        v-for="favoriteArtwork in favoriteArtworks"
+        :key="favoriteArtwork.id"
+        @click.stop="showArtwork(favoriteArtwork)">
         <ArtworkListItem
           :artwork="favoriteArtwork"
-          @remove-artwork="handleRemoveArtwork(favoriteArtwork)"/>
+          @remove-artwork="handleRemoveArtwork(favoriteArtwork)" />
       </li>
     </TransitionGroup>
   </ul>
@@ -72,10 +74,26 @@ async function handleRemoveArtwork(artwork: FavoriteArtwork) {
     &:not(:last-child) {
       margin-bottom: 5px;
     }
-    .dark & {
-
-    }
   }
+
+  .list-move, /* apply transition to moving elements */
+  .list-enter-active,
+  .list-leave-active {
+      transition: transform .25 ease-in;
+    }
+
+  .list-enter-from,
+  .list-leave-to {
+    transform: translateX(-100%);
+  }
+
+  /* ensure leaving items are taken out of layout flow so that moving
+   animations can be calculated correctly. */
+  .list-leave-active {
+    position: absolute;
+  }
+
+  /*
   .list-item-enter-active,
   .list-item-leave-active {
     transition: transform .25s ease-out;
@@ -93,7 +111,7 @@ async function handleRemoveArtwork(artwork: FavoriteArtwork) {
   .list-item-leave-to {
     transform: translateX(-100%);
 
-  }
+  } */
   .modal-enter-active,
   .modal-leave-active {
     transition: top 0.25s ease;

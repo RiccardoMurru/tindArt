@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
   import { RouterView } from 'vue-router';
   import { useThemeStore } from '@/stores/theme';
 
@@ -25,7 +24,7 @@
     --secondaryBackground: #000912;
     --backgroundListItem: rgba(255, 255, 255, 0.02);
     --modalText: #fff;
-    * {
+    *:not(.artwork) {
       transition: all .15s ease-out;
     }
   }
@@ -36,7 +35,7 @@
     --secondaryBackground: #003049;
     --backgroundListItem: rgba(0, 21, 36, .05);
     --modalText: #fff;
-    * {
+    *:not(.artwork){
       transition: all .15s ease-out;
     }
   }

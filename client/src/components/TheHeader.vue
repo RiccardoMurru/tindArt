@@ -6,11 +6,8 @@ const props = defineProps<{
 </script>
 <template>
   <header>
+    <h1>{{ heading }}</h1>
     <img src="../assets/logo.png" alt="logo" class="logo" />
-    <div>
-      <h1>{{ heading }}</h1>
-    </div>
-    <span class="icon-menu"></span>
   </header>
 </template>
 

@@ -1,18 +1,17 @@
 <script setup lang="ts">
-  import { onMounted, reactive, ref, watch } from 'vue';
+  import { onMounted, ref } from 'vue';
+  import { useArtworkStore } from '@/stores/artwork';
   import ArtworkItem from './ArtworkItem.vue';
   import {
     getArtworks,
     getArtworksFromDb,
     addArtwork,
-    getArtist,
-    addFavoriteArtwork,
-    unlikeArtwork,
   } from '@/apiService';
   import { size } from '@/apiConfig';
   import type { Artwork } from '@/types';
 
-  const artworksData = reactive<Artwork[]>([]);
+  const artworksData = useArtworkStore();
+
   let offset = ref<number>(0);
   let animationDirection = ref<string>('');
 
@@ -39,51 +38,39 @@
     for (let i = 0; i < formattedArtworks.length; i++) {
       await addArtwork(formattedArtworks[i]);
     }
-    // formattedArtworks.forEach(artwork => {
-    //   addArtwork(artwork);
-    // });
 
     const artworksFromDb = await getArtworksFromDb();
 
     //set state as artworks from db
 
-    artworksData.push(...artworksFromDb.reverse());
-
+    // artworksData.push(...artworksFromDb.reverse());
+    artworksData.setArtworks(artworksFromDb.reverse());
 
     offset.value += size;
-
   }
 
   async function handleLikeArtwork(artwork: Artwork, action: string) {
-    const index = artworksData.indexOf(artwork);
-    artworksData.splice(index, 1);
     if (action === 'like') {
       animationDirection.value = 'right';
-      try {
-        artwork.artists = await getArtist(artwork);
-      } catch (error) {
-        console.log(error);
-      }
-      artwork.isFavorite = true;
-      addFavoriteArtwork(artwork);
-    } else if (action === 'unlike') {
+      await artworksData.likeArtwork(artwork);
+    }
+    if (action === 'unlike') {
       animationDirection.value = 'left';
-      artwork.isNotLiked = true;
-      unlikeArtwork(artwork);
+      await artworksData.notLikeArtwork(artwork);
     }
   }
 
-  watch(
-    () => artworksData,
-    newArtworksData => {
-      if (newArtworksData.length === 0) {
-        getNewArtworks();
-      }
-    },
-    {
-      deep: true,
-    }
-  );
+  // watch(
+  //   () => artworksData,
+  //   newArtworksData => {
+  //     if (newArtworksData.value === 0) {
+  //       getNewArtworks();
+  //     }
+  //   },
+  //   {
+  //     deep: true,
+  //   }
+  // );
   onMounted(async () => {
     getNewArtworks();
   });
@@ -93,10 +80,10 @@
   <main>
     <TransitionGroup :name="animationDirection">
       <ArtworkItem
-        v-for="artworkData in artworksData"
+        v-for="artworkData in artworksData.artworksData"
         :key="artworkData.id"
         :artwork="artworkData"
-        @like-artwork="handleLikeArtwork(artworkData, $event.action)" />
+        @like-artwork="handleLikeArtwork($event.artwork, $event.action)" />
     </TransitionGroup>
   </main>
 </template>

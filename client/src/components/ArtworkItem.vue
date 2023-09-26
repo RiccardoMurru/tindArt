@@ -31,19 +31,15 @@
 
       let posX = ev.deltaX;
       el.style.left = `${posX}px`;
-      // el.style.transform = `translateX(${posX}px)`;
       const threshold = width / 2;
 
       if (ev.isFinal) {
         isMoving.value = false;
         if (ev.offsetDirection === 4 && posX > threshold) {
-          //direction 4 = right
           likeArtwork(artwork, 'like');
         } else if (ev.offsetDirection === 2 && width + posX < threshold) {
-          //direction 2 = left
           likeArtwork(artwork, 'unlike');
         } else {
-          // el.style.transform = 'translateX(0)';
           el.style.top = '5px';
           el.style.left = '5px';
         }
