@@ -6,6 +6,7 @@
     getArtworks,
     getArtworksFromDb,
     addArtwork,
+getArtist,
   } from '@/apiService';
   import { size } from '@/apiConfig';
   import type { Artwork } from '@/types';
@@ -20,7 +21,7 @@
     const artworks = await getArtworks(offset.value);
 
     //format artworks
-    const formattedArtworks = artworks.map(artwork => ({
+     const formattedArtworks = artworks.map( artwork => ({
       id: artwork.id,
       title: artwork.title,
       image: artwork._links!.image.href.replace('{image_version}', 'large'),
@@ -31,7 +32,7 @@
       _links: artwork._links,
       isFavorite: false,
       isNotLiked: false,
-      artists: '',
+       artists: '',
     }));
 
     //add artworks to db
@@ -60,17 +61,6 @@
     }
   }
 
-  // watch(
-  //   () => artworksData,
-  //   newArtworksData => {
-  //     if (newArtworksData.value === 0) {
-  //       getNewArtworks();
-  //     }
-  //   },
-  //   {
-  //     deep: true,
-  //   }
-  // );
   onMounted(async () => {
     getNewArtworks();
   });
