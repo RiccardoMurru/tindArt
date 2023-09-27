@@ -15,5 +15,3 @@ tindArt uses:
 
 tindArt fetches data from [Artsy API](https://developers.artsy.net/), an account and a secret key is needed for using the API.
 
-A token is stored in apiConfig.ts file, but its expiration date is 28/09
-
