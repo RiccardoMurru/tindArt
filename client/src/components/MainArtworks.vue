@@ -18,7 +18,7 @@ getArtist,
 
   async function getNewArtworks() {
     //get artworks from api
-    const artworks = await getArtworks(offset.value);
+    const artworks = await getArtworks();
 
     //format artworks
      const formattedArtworks = artworks.map( artwork => ({

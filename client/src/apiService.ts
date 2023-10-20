@@ -3,19 +3,11 @@ import type { Artwork } from './types';
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
-export async function getArtworks(offset: number): Promise<Artwork[]> {
-  const response = await fetch(
-    `${apiUrl}/artworks?size=${size}&offset=${offset}`,
-    {
-      method: 'GET',
-      headers: {
-        'X-XAPP-Token': token,
-      },
-    }
-  );
-
-  const data = await response.json();
-  const artworks = data._embedded.artworks;
+export async function getArtworks(): Promise<Artwork[]> {
+  const response = await fetch(`${serverUrl}/artworks`, {
+    method: 'GET',
+  });
+  const artworks = await response.json();
   return artworks;
 }
 

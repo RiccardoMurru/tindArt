@@ -1,6 +1,25 @@
 const Artwork = require('../models/artwork');
+require('dotenv').config();
 
-// at the beginning the artworks are added to the db
+async function getArtworksFromAPI (req, res) {
+  const url = process.env.API_URL;
+  console.log(url);
+  try {
+    const response = await fetch(`${process.env.API_URL}/artworks?size=50`, {
+      headers: {
+        'X-XAPP-Token': process.env.API_TOKEN,
+      },
+    });
+    const data = await response.json();
+    const artworks = data._embedded.artworks;
+    res.status(200).json(artworks);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Server error' });
+    }
+  }
+
+  // at the beginning the artworks are added to the db
 async function addArtwork (req, res) {
   try {
     const artwork = req.body;
@@ -112,4 +131,5 @@ module.exports = {
   addFavoriteArtwork,
   deleteArtwork,
   unlikeArtwork,
+  getArtworksFromAPI,
 }

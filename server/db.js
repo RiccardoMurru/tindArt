@@ -1,10 +1,12 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
-const dbPort = 27017;
-const dbName = 'tindart';
+const dbPort = process.env.DB_PORT;
+const dbName = process.env.DB_NAME;
+const dbUrl = process.env.DB_URL;
 
 (async () => {
   try {
-    mongoose.connect(`mongodb://127.0.0.1:${dbPort}/${dbName}`);
+    mongoose.connect(`${dbUrl}:${dbPort}/${dbName}`);
     console.log(`Database connected on port ${dbPort}!`);
   } catch (error) {
     console.log(`Database error: ${error}`);

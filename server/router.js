@@ -4,7 +4,7 @@ const {
   addArtwork,
   getFavoriteArtworks,
   addFavoriteArtwork,
-  deleteArtwork,
+  getArtworksFromAPI,
   unlikeArtwork,
 } = require('./controllers/artwork');
 
@@ -13,6 +13,7 @@ const router = express.Router();
 router.get('/', getArtworks);
 router.post('/', addArtwork);
 router.put('/', addFavoriteArtwork);
+router.get('/artworks', getArtworksFromAPI);
 router.put('/unlike', unlikeArtwork)
 // router.delete('/', deleteArtwork);
 router.get('/my-artworks', getFavoriteArtworks);
