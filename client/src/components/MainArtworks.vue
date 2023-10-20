@@ -44,7 +44,6 @@ getArtist,
 
     //set state as artworks from db
 
-    // artworksData.push(...artworksFromDb.reverse());
     artworksData.setArtworks(artworksFromDb.reverse());
 
     offset.value += size;

@@ -1,8 +1,7 @@
 import { apiUrl, token, size } from './apiConfig';
 import type { Artwork } from './types';
 
-const serverUrl = 'http://localhost:3000';
-// const serverUrl = 'https://tindart.fly.dev';
+const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 export async function getArtworks(offset: number): Promise<Artwork[]> {
   const response = await fetch(

@@ -3,7 +3,6 @@
 
   const store = useThemeStore();
 
-  // const emits = defineEmits(['change-color-theme']);
   function changeColorTheme() {
     store.toggleColorTheme();
   }
@@ -11,7 +10,6 @@
 
 <template>
   <footer>
-    <!-- <router-link to="/settings" class="icon-settings"></router-link> -->
     <button class="icon-theme" @click="changeColorTheme"></button>
     <router-link to="/" class="icon-home"></router-link>
     <router-link to="/my-artworks" class="icon-gallery"></router-link>

@@ -93,25 +93,6 @@
     position: absolute;
   }
 
-  /*
-  .list-item-enter-active,
-  .list-item-leave-active {
-    transition: transform .25s ease-out;
-  }
-  .list-item-enter-from {
-    transform: translateX(-100%);
-  }
-  .list-item-enter-to {
-    transform: translateX(0);
-
-  }
-  .list-item-leave-from {
-    transform: translateX(0);
-  }
-  .list-item-leave-to {
-    transform: translateX(-100%);
-
-  } */
   .modal-enter-active,
   .modal-leave-active {
     transition: top 0.25s ease;
