@@ -11,13 +11,26 @@ tindArt is a 'tinder for artworks' web application, its mission is making the pr
       git clone https://github.com/RiccardoMurru/tindArt.git
       cd tindart
     ```
-2. Install the dependencies and run the server:
+
+2. Set .env in server folder:
+   ```env
+      API_URL=https://api.artsy.net/api
+      API_TOKEN= your Artsy API token
+      DB_NAME=tindart
+      DB_PORT= your DB port
+      DB_URL= your DB url
+   ```
+3. Set .env.local in client folder:
+   ```env
+      VITE_SERVER_URL= your server url
+   ```
+4. Install the dependencies and run the server:
 
    ```bash
       cd server && npm install
       node .
     ```
-3. Install the dependencies and run the client:
+5. Install the dependencies and run the client:
 
    ```bash
       cd client && npm install
