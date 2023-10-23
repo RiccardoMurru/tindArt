@@ -21,6 +21,7 @@ tindArt is a 'tinder for artworks' web application, its mission is making the pr
       DB_URL= your DB url
    ```
 3. Set .env.local in client folder:
+
    ```env
       VITE_SERVER_URL= your server url
    ```
